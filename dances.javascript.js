@@ -7,7 +7,7 @@ with dances
 
 	firstDate: 2013.05.06
 
-	lastDate: 2013.05.06
+	lastDate: 2013.05.13
 
 	require: [
 		dances.amd
@@ -36,6 +36,14 @@ with dances
 			fMerge,
 			fStab,
 			fExtend,
+
+			uc = function(fn){
+				return function(){
+					return Function.prototype.call.apply(fn, arguments);
+				}
+			},
+
+			slice = uc(Array.prototype.slice),
 
 			fToString = Object.prototype.toString
 		;
@@ -203,8 +211,8 @@ with dances
 
 		exports.merge = function(){
 			var
-				args = Array.prototype.slice.call(arguments, 0)
-				;
+				args = slice(arguments, 0)
+			;
 
 			args.push(fMerge);
 			return fEatBridge.apply(exports, args);
@@ -212,8 +220,8 @@ with dances
 
 		exports.stab = function(){
 			var
-				args = Array.prototype.slice.call(arguments, 0)
-				;
+				args = slice(arguments, 0)
+			;
 
 			args.push(fStab);
 			return fEatBridge.apply(exports, args);
@@ -221,11 +229,18 @@ with dances
 
 		exports.extend = function(){
 			var
-				args = Array.prototype.slice.call(arguments, 0)
-				;
+				args
+			;
 
-			args.push(fExtend);
-			return fEatBridge.apply(exports, args);
+			if("string" === typeof arguments[0] && "function" === typeof arguments[1]){
+				dances[arguments[0]] = arguments[1];
+
+			}else{
+				args = slice(arguments, 0);
+				args.push(fExtend);
+			}
+
+			return args ? fEatBridge.apply(exports, args) : exports;
 		};
 
 	})(dances);
