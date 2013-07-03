@@ -5,10 +5,22 @@
 目标是实现与 underscore.js 专注工具模块.  
 
 ### 包含模块
-+ dances.javascript
-+ dances.nativeExtend  
+
++ dances.json
+
++ dances.trim
+
++ dances.stab
++ dances.extend
++ dances.merge
++ dances.copy
+
++ dances.random
+
++ dances.namespace
++ dances.type
 
 ### dances.javascript
 
-### dances.naitveExtend
+### dances.nativeExtend
  

@@ -7,7 +7,7 @@ with dances
 
 	firstDate: 2013.05.06
 
-	lastDate: 2013.05.13
+	lastDate: 2013.07.03
 
 	require: [
 		dances.amd
@@ -25,8 +25,21 @@ with dances
 (function(dances){
 	"use strict";
 
-	// dances.extend_merge_stab
-	// TODO 单元测试
+	var uc = function(fn){
+		return function(){
+			return Function.prototype.call.apply(fn, arguments);
+		}
+	};
+
+	dances || (dances = (function(){
+		function Foo(){ }
+		Foo.prototype.root = "dances.javascript";
+		window.dances = new Foo();
+		return window.dances;
+	})());
+
+	// dances.extend dances.merge dances.stab
+	// TODO review
 	dances && (function(exports){
 
 		var
@@ -37,15 +50,9 @@ with dances
 			fStab,
 			fExtend,
 
-			uc = function(fn){
-				return function(){
-					return Function.prototype.call.apply(fn, arguments);
-				}
-			},
-
 			slice = uc(Array.prototype.slice),
 
-			fToString = Object.prototype.toString
+			toString = uc(Object.prototype.toString)
 		;
 
 		fEat = function(oTarget, oOrigin, bDeep, bProto, bProtect){
@@ -124,7 +131,7 @@ with dances
 
 				if(item && ("object" === sType || "function" === sType)){
 
-					oMerge || (oMerge = "[object Array]" === fToString.call(item) ? [] : {});
+					oMerge || (oMerge = "[object Array]" === toString(item) ? [] : {});
 
 					fEat(oMerge, item, bDeep, bProto, bProtect);
 				}
@@ -246,7 +253,7 @@ with dances
 	})(dances);
 
 	// dances.type
-	// TODO 单元测试
+	// TODO unit-Test
 	dances && (function(exports){
 		var
 			type,
@@ -477,7 +484,7 @@ with dances
 	})(dances);
 
 	// dances.trim
-	// TODO 单元测试
+	// TODO unit-Test
 	dances && (function(exports){
 		exports.trim = function(str){
 			if(!str || "string" !== typeof str){
@@ -505,6 +512,272 @@ with dances
 
 			return str.replace(/\s+$/, "");
 		};
+	})(dances);
+
+	// dances.bind dances.bindBefore dances.bindAfter
+	// TODO review
+	// TODO unit-Test
+	dances && (function(exports){
+		var
+			bind,
+			_before,
+			_after,
+
+			revertArr
+		;
+
+		revertArr = function(arr, n){
+			n = ("number" === typeof n && n > -1) ? n : 0;
+			return Array.prototype.slice.call(arr, n);
+		};
+
+		_before = function(scope){
+			var boundAgs = revertArr(arguments),
+				f
+				;
+
+			if("function" === typeof scope){
+				f = boundAgs.shift();
+				scope = null;
+
+			}else{
+				scope = boundAgs.shift();
+				f = boundAgs.shift();
+				if("function" !== typeof f){
+					throw "bindLeft expect a function as call function";
+				}
+
+			}
+
+			return function(){
+				return f.apply(scope || this, boundAgs.concat(revertArr(arguments)));
+			};
+		};
+
+		_after = function(scope){
+			var boundAgs = revertArr(arguments),
+				f
+				;
+
+			if("function" === typeof scope){
+				f = boundAgs.shift();
+				scope = null;
+
+			}else{
+				scope = boundAgs.shift();
+				f = boundAgs.shift();
+				if("function" !== typeof f){
+					throw "bindRight expect a function as call function";
+				}
+
+			}
+
+			return function(){
+				return f.apply(scope || this, revertArr(arguments).concat(boundAgs));
+			};
+		};
+
+		bind = function(scope){
+			var boundAgs = revertArr(arguments),
+				f
+				;
+
+			if("function" === typeof scope){
+				f = boundAgs.shift();
+				scope = null;
+
+			}else{
+				scope = boundAgs.shift();
+				f = boundAgs.shift();
+				if("function" !== typeof f){
+					throw "bind expect a function as call function"
+				}
+
+			}
+
+			return function(){
+				var _boundAgs = boundAgs,
+
+					ags = revertArr(arguments),
+					num = _boundAgs.length,
+
+					i = 0
+					;
+
+				for(; i < num; i++){
+					undefined === _boundAgs[i] && (_boundAgs[i] = ags.shift());
+				}
+
+				ags.length > 0 && (_boundAgs = _boundAgs.concat(ags));
+
+				return f.apply(scope || this, _boundAgs);
+			};
+		};
+
+		exports.bind = bind;
+		exports.bindBefore = _before;
+		exports.bindAfter = _after;
+
+	})(dances);
+
+	// dances.json
+	// TODO review
+	// TODO unit-Test
+	dances && (function(exports){
+		var
+			json,
+
+			router,
+			isLegalJSON,
+			A2J,
+			O2J,
+
+			isArr
+		;
+
+		isLegalJSON = function(data){
+			return /^[\],:{}\s]*$/.test(data.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, ""));
+		};
+
+		A2J = function(data, bLost){
+			var arr = [],
+				i = 0,
+				num = data.length,
+				item
+				;
+
+			for(; i < num; i++){
+				arr.push(router(data[i], bLost));
+			}
+
+			// null/undefined 转换为"null"
+			for(i = 0; i < num; i++){
+				item = arr[i];
+				if(null === item || undefined === item){
+					arr[i] = "null";
+				}
+			}
+
+			// gc
+			item = null;
+			arr = "[" + arr.join(",") + "]";
+			return arr;
+		};
+
+		O2J = function(data, bLost){
+			var arr = [],
+				prop,
+				item
+				;
+			for(prop in data){
+				if(data.hasOwnProperty(prop) || bLost){
+
+					// 值为 undefined 则 continue
+					item = data[prop];
+					if(undefined === item){
+						continue;
+					}
+					arr.push('"' + prop + '"' + ':' + router(data[prop], bLost));
+				}
+			}
+
+			arr = "{" + arr.join(",") + "}";
+			return arr;
+		};
+
+		router = function(data, bLost){
+			var result;
+			switch(typeof data){
+
+				// 只针对 数组有用.
+				case "undefined":
+					result = null;
+					break;
+
+				case "string":
+					result = '"' + data + '"';
+					break;
+
+				case "object":
+					result = data ?
+						isArr(data) ?
+							A2J(data, bLost)
+							: O2J(data, bLost)
+						: null
+					;
+					break;
+
+				case "function":
+					result = O2J(data, bLost);
+					break;
+
+				default:
+					result = data;
+			}
+			return result;
+		};
+
+		json = function(data, bLost){
+			if(!data){
+				return data;
+			}
+			var type = typeof data ,
+				result
+				;
+
+			isArr = isArr || dances.type.isArrLike;
+
+			type = ("string" === type) ?
+				1 :
+				("object" === type || "function" === type) ?
+					2 :
+					0
+			;
+
+			// 0: 阻止
+			// 1: 子串data
+			// 2: 对象data
+			switch(type){
+				case 0:
+					result = data;
+					break;
+
+				// parseJSON || JSON.parse()
+				case 1:
+					if(!isLegalJSON(data)){
+						throw "非法 JSON";
+					}
+					try{
+						result = JSON.parse(data);
+					}catch(e){
+						try{
+							result = eval((new Function("", "return" + "  " + data))());
+						}catch(e){
+							result = data;
+							throw "解析 JSON对象 失败";
+						}
+					}
+					break;
+
+				// revertJSON || JSON.stringify()
+				case 2:
+					try{
+						result = JSON.stringify(data);
+					}catch(e){
+						try{
+							result = isArr(data) ? A2J(data, bLost) : O2J(data, bLost);
+						}catch(e){
+							throw "字符串化 JSON对象 失败";
+						}
+					}
+					break;
+			}
+
+			return result;
+		};
+
+		exports.json = json;
+
 	})(dances);
 
 	dances && window.define && define.amd && define.amd.dancesJs && define(function(){
