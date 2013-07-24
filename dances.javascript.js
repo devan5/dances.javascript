@@ -22,16 +22,20 @@ with dances
 
 ~~~~~~~~*/
 
-(function(exports, undefined){
+(function(dances, undefined){
 	"use strict";
 
-	var uc = function(fn){
-		return function(){
-			return Function.prototype.call.apply(fn, arguments);
-		}
-	};
+	var
+        uc = function(fn){
+            return function(){
+                return Function.prototype.call.apply(fn, arguments);
+            }
+        },
 
-	exports || (exports = (function(){
+        toString = uc(Object.prototype.toString)
+    ;
+
+	dances || (dances = (function(){
 		function Foo(){ }
 		Foo.prototype.root = "dances.javascript";
 		window.dances = new Foo();
@@ -250,7 +254,7 @@ with dances
 			return args ? fEatBridge.apply(exports, args) : exports;
 		};
 
-	})(exports);
+	})(dances);
 
 	// dances.type
 	// TODO unit-Test
@@ -289,7 +293,7 @@ with dances
 		};
 
 		isElement = function(El, bStrict){
-			if(regElement.test(Object.prototype.toString.call(El).slice(8, -1).toLowerCase())){
+			if(regElement.test(toString(El).slice(8, -1).toLowerCase())){
 				return true;
 			}
 			return (isNode(El, bStrict)) ? 1 === El.nodeType : false;
@@ -300,7 +304,7 @@ with dances
 				return false;
 			}
 
-			switch(Object.prototype.toString.call(Els).slice(8, -1).toLowerCase()){
+			switch(toString(Els).slice(8, -1).toLowerCase()){
 				case "object":
 				case "nodelist":
 					try{
@@ -319,7 +323,7 @@ with dances
 		};
 
 		isText = function(text, bStrict){
-			switch(Object.prototype.toString.call(text).slice(8, -1).toLowerCase()){
+			switch(toString.call(text).slice(8, -1).toLowerCase()){
 				case "object":
 					return ("object" === typeof text && isNode(text, bStrict)) ? 3 === text.nodeType : false;
 
@@ -332,7 +336,7 @@ with dances
 		};
 
 		isArray = function(data){
-			return Object.prototype.toString.call(data) === "[object Array]";
+			return toString(data) === "[object Array]";
 		};
 
 		isArrLike = function(arr){
@@ -380,7 +384,7 @@ with dances
 
 				}else{
 
-					type = Object.prototype.toString.call(data).slice(8, -1).toLowerCase();
+					type = toString(data).slice(8, -1).toLowerCase();
 					answer = type;
 
 					if(regElement.test(type)){
@@ -481,7 +485,7 @@ with dances
 
 		exports.type = type;
 
-	})(exports);
+	})(dances);
 
 	// dances.trim
 	// TODO unit-Test
@@ -512,7 +516,7 @@ with dances
 
 			return str.replace(/\s+$/, "");
 		};
-	})(exports);
+	})(dances);
 
 	// dances.bind dances.bindBefore dances.bindAfter
 	// TODO review
@@ -618,7 +622,7 @@ with dances
 		exports.bindBefore = _before;
 		exports.bindAfter = _after;
 
-	})(exports);
+	})(dances);
 
 	// dances.json
 	// TODO review
@@ -778,10 +782,49 @@ with dances
 
 		exports.json = json;
 
-	})(exports);
+	})(dances);
+    
+    // dances.namespace
+    dances.namespace = function(sChain, root, win){
+        var i,
+            len,
+            item,
+            itemV
+        ;
 
-	window.define && define.amd && define.amd.dancesJs && define(function(){
-		return exports;
+        if(!sChain || "string" !== typeof sChain){
+            return {};
+        }
+
+        sChain = sChain.split(".");
+        len = sChain.length;
+        root = root || window;
+        win = win && win.top === top ? win : window;
+
+        for(i = 0; i < len; i++){
+            item = sChain[i];
+            itemV = root[item];
+
+            /*
+             if(!itemV || ("object" !== typeof itemV && "function" !== typeof itemV)){
+             如果是某些内置 Date Regexp Match 会导致失去关联
+             */
+            if("[object Object]" !== toString(itemV) && "function" !== typeof itemV){
+                root[item] = win.Object();
+            }
+
+            // 转变指针
+            root = root[item];
+        }
+
+        //gc
+        win = null;
+
+        return root;
+    };
+
+    window.define && define.amd && define.amd.dancesJs && define(function(){
+		return dances;
 	});
 
 })(window.dances);

@@ -33,4 +33,5 @@
     };
 
     exports["debounce"] = debounce;
+
 })(window.dances);
