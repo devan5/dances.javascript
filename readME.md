@@ -7,9 +7,12 @@
 ### 包含模块
 
 #### TDO
++ 拆分为子单元, 使用 Grunt 合并发布为发型版本
++ 增加单元测试
 + dances.copy
 + dances.random
 + dances.namespace
+
 
 #### dances.javascript
 
@@ -24,6 +27,9 @@
 + dances.bind & dances.bindBefore & dances.bindAfter
 
 + dances.json
+
++ dances.throttle
++ dances.debounce
 
 #### dances.nativeExtend
  实现对低端浏览器, 对 ECMAscript 5 的补全.

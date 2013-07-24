@@ -22,7 +22,7 @@ with dances
 
 ~~~~~~~~*/
 
-(function(dances){
+(function(exports, undefined){
 	"use strict";
 
 	var uc = function(fn){
@@ -31,7 +31,7 @@ with dances
 		}
 	};
 
-	dances || (dances = (function(){
+	exports || (exports = (function(){
 		function Foo(){ }
 		Foo.prototype.root = "dances.javascript";
 		window.dances = new Foo();
@@ -40,7 +40,7 @@ with dances
 
 	// dances.extend dances.merge dances.stab
 	// TODO review
-	dances && (function(exports){
+	(function(exports){
 
 		var
 			fEat,
@@ -240,7 +240,7 @@ with dances
 			;
 
 			if("string" === typeof arguments[0] && "function" === typeof arguments[1]){
-				dances[arguments[0]] = arguments[1];
+				exports[arguments[0]] = arguments[1];
 
 			}else{
 				args = slice(arguments, 0);
@@ -250,11 +250,11 @@ with dances
 			return args ? fEatBridge.apply(exports, args) : exports;
 		};
 
-	})(dances);
+	})(exports);
 
 	// dances.type
 	// TODO unit-Test
-	dances && (function(exports){
+	(function(exports){
 		var
 			type,
 
@@ -481,11 +481,11 @@ with dances
 
 		exports.type = type;
 
-	})(dances);
+	})(exports);
 
 	// dances.trim
 	// TODO unit-Test
-	dances && (function(exports){
+	(function(exports){
 		exports.trim = function(str){
 			if(!str || "string" !== typeof str){
 				return str;
@@ -512,12 +512,12 @@ with dances
 
 			return str.replace(/\s+$/, "");
 		};
-	})(dances);
+	})(exports);
 
 	// dances.bind dances.bindBefore dances.bindAfter
 	// TODO review
 	// TODO unit-Test
-	dances && (function(exports){
+	(function(exports){
 		var
 			bind,
 			_before,
@@ -618,12 +618,12 @@ with dances
 		exports.bindBefore = _before;
 		exports.bindAfter = _after;
 
-	})(dances);
+	})(exports);
 
 	// dances.json
 	// TODO review
 	// TODO unit-Test
-	dances && (function(exports){
+	(function(exports){
 		var
 			json,
 
@@ -725,7 +725,7 @@ with dances
 				result
 				;
 
-			isArr = isArr || dances.type.isArrLike;
+			isArr = isArr || exports.type.isArrLike;
 
 			type = ("string" === type) ?
 				1 :
@@ -778,10 +778,10 @@ with dances
 
 		exports.json = json;
 
-	})(dances);
+	})(exports);
 
-	dances && window.define && define.amd && define.amd.dancesJs && define(function(){
-		return dances;
+	window.define && define.amd && define.amd.dancesJs && define(function(){
+		return exports;
 	});
 
 })(window.dances);

@@ -1,0 +1,95 @@
+﻿<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>jasmine Spec Runner</title>
+
+    <!--jasmine lib-->
+    <link rel="stylesheet" type="text/css" href="lib/jasmine-1.3.1/jasmine.css" media="all">
+    <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine.js"></script>
+    <script type="text/javascript" src="lib/jasmine-1.3.1/jasmine-html.js"></script>
+
+    <!-- include source files here... -->
+    <script type="text/javascript">
+        // $log
+        window.$log = (function(){
+            var
+                $log,
+                logRepo = {}
+                ;
+
+            $log = Boolean;
+
+            if(window.console && window.console.log){
+                $log = console.log;
+
+                try{
+                    $log("_____" + (new Date).toString() + "_____");
+
+                }catch(e){
+                    $log = null;
+                }
+
+                $log || ($log = function(){ console.log.apply(console, arguments); }) && $log("_____" + (new Date).toString() + "_____");
+
+                window.$$log || (window.$$log = function(msg, method){
+                    method = method || "log";
+
+                    logRepo[method] || (logRepo[method] = console[method] ? console[method] : console.log);
+
+                    "function" === typeof console[method] ?
+                        logRepo[method].call(console, msg) :
+                        logRepo[method](msg)
+                    ;
+
+                });
+
+            }else{
+                window.$$log = function(){return Array.prototype.slice.call(arguments, 0).join(", ")};
+            }
+
+            return $log;
+        })();
+    </script>
+    <script type="text/javascript" src="dances.javascript.js"></script>
+    <script type="text/javascript" src="dances.loop.js"></script>
+
+    <!-- include spec files here... -->
+    <script type="text/javascript" src="spec/dances.extend_merge_stab_specs.js"></script>
+    <script type="text/javascript" src="spec/dances.loop_specs.js"></script>
+
+    <!-- 执行结果 -->
+    <script type="text/javascript">
+        (function(){
+            var jasmineEnv = jasmine.getEnv();
+            jasmineEnv.updateInterval = 1000;
+
+            var htmlReporter = new jasmine.HtmlReporter();
+//			var htmlReporter = new jasmine.TrivialReporter();
+
+            jasmineEnv.addReporter(htmlReporter);
+
+            jasmineEnv.specFilter = function(spec){
+                return htmlReporter.specFilter(spec);
+            };
+
+            var currentWindowOnload = window.onload;
+
+            window.onload = function(){
+                if(currentWindowOnload){
+                    currentWindowOnload();
+                }
+                execJasmine();
+            };
+
+            function execJasmine(){
+                jasmineEnv.execute();
+            }
+
+        })();
+    </script>
+
+</head>
+<body>
+</body>
+</html>
