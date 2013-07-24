@@ -1,0 +1,22 @@
+{
+
+	"default": [
+		"dances.javascript.start.js",
+		"dances.util.js",
+
+		"dances.namespace.js",
+		"dances.extend_merge_stab.js",
+		"dances.type.js",
+		"dances.trim.js",
+		"dances.bind_bindBefore_bindAfter.js",
+		"dances.json.js",
+
+		"dances.throttle.js",
+		"dances.debounce.js",
+
+		"dances.loop.js",
+
+
+		"dances.javascript.end.js"
+	]
+}

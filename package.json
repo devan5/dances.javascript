@@ -1,0 +1,26 @@
+{
+  "name": "dances.javascript",
+  "version": "2.0.0",
+  "description": "模块专注于 javascript 语言本身.   \r 一方面的目标是实现与 underscore.js 类似专注于提供 javascript 模式操作工具模块的集合.",
+  "main": "dances.javascript.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devan5/dances.javascript.git"
+  },
+  "author": "devan5",
+  "license": "MIT",
+  "readmeFilename": "readME.md",
+  "gitHead": "86ac9b5b6cc87299ef0333d2ac510a6d5e23a78f",
+  "bugs": {
+    "url": "https://github.com/devan5/dances.javascript/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-uglify": "~0.2.2"
+  }
+}
