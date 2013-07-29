@@ -1,26 +1,29 @@
 module.exports = function(grunt){
 	var
-		oPath,
-
-		projectName
+        oModule
 	;
 
-	oPath = {
-		srcBase: "snap/",
+    oModule = {
+	    name : "dances.javascript",
+	    srcBase: "snap/",
 		destBase: "dist/"
-	};
-
-	projectName = "dances.javascript";
+    };
 
 	grunt.initConfig({
+		pkg      : grunt.file.readJSON("package.json"),
 		buildData: grunt.file.readJSON("build.json"),
 		concat   : {
 			generic: {
-				expand: true,
-				cwd   : oPath.srcBase,
-				src   : "<%= buildData.default %>",
-				rename: function(){
-					return oPath.destBase + projectName + ".js";
+				options: {
+					banner: '/* <%= pkg.name %> - v<%= pkg.version %> - ' +
+					        '<%= grunt.template.today("yyyy-mm-dd") %> */' +
+							'\n'
+				},
+				expand : true,
+				cwd    : oModule.srcBase,
+				src    : "<%= buildData.default %>",
+				rename : function(){
+					return oModule.destBase + oModule.name + ".js";
 				}
 			}
 		},
@@ -28,10 +31,13 @@ module.exports = function(grunt){
 			generic: {
 				expand : true,
 				options: {
+					banner: '/* <%= pkg.name %> - v<%= pkg.version %> - ' +
+					        '<%= grunt.template.today("yyyy-mm-dd, h:MM:ss TT") %> */' +
+					        '\n',
 					report   : "gzip",
-					sourceMap: oPath.destBase + projectName + "-map.js"
+					sourceMap: oModule.destBase + oModule.name + "-map.js"
 				},
-				src    : oPath.destBase + projectName + ".js",
+				src    : oModule.destBase + oModule.name + ".js",
 				ext    : ".javascript.min.js"
 			}
 		}
