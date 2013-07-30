@@ -38,7 +38,8 @@ module.exports = function(grunt){
 					sourceMap: oModule.destBase + oModule.name + "-map.js"
 				},
 				src    : oModule.destBase + oModule.name + ".js",
-				ext    : ".javascript.min.js"
+//				ext    : ".javascript.min.js"
+				ext    : (oModule.name.slice(oModule.name.lastIndexOf(".") + 1) + ".min.js")
 			}
 		}
 	});
