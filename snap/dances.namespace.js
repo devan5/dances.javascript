@@ -1,3 +1,6 @@
+/**
+ * @name dances.namespace
+ */
 (function(exports){
     var ns;
 

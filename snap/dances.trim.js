@@ -1,3 +1,6 @@
+/**
+ * @name dances.trim
+ */
 // TODO unit-Test
 (function(exports){
 	exports.trim = function(str){

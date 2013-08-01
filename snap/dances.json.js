@@ -1,3 +1,6 @@
+/**
+ * @name dances.json
+ */
 // TODO review
 // TODO unit-Test
 (function(exports){

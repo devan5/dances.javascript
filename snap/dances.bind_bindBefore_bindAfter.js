@@ -1,3 +1,7 @@
+/**
+ * @name dances.bind_bindBefore_bindAfter
+ * @desc 绑定函数 This 指针
+ */
 // TODO review
 // TODO unit-Test
 (function(exports){

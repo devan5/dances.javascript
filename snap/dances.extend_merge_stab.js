@@ -1,3 +1,6 @@
+/**
+ * @name dances.stab_merge_extend
+ */
 // TODO review
 (function(exports){
 

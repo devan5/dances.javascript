@@ -1,3 +1,6 @@
+/**
+ * @name dances.type
+ */
 // TODO unit-Test
 (function(exports){
     var

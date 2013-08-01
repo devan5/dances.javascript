@@ -1,6 +1,7 @@
 /**
+ * @name dances.throttle
  * @author devan5
- * @overview 密集型调用, 防止 UI 锁死. 并提供可配置时间闸, 调用元方法.
+ * @desc 密集型调用, 防止 UI 锁死. 并提供可配置时间闸, 调用元方法.
  *
  */
 

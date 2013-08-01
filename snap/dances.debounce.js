@@ -1,4 +1,5 @@
 /**
+ * @name dances.debounce
  * @author devan5
  * @overview 密集型调用. 可配置拖延时间,拖延至最后一次调用.
  *

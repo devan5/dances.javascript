@@ -1,8 +1,8 @@
 /**
+ * @name dances.loop
  * @author devan5
  * @overview
  */
-
 (function(exports){
     var loop ;
 
