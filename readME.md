@@ -10,7 +10,6 @@
 + 拆分为子单元, 使用 Grunt 合并发布为发型版本
 + 增加单元测试
 + dances.copy
-+ dances.random
 + dances.namespace
 
 
@@ -30,6 +29,8 @@
 
 + dances.throttle
 + dances.debounce
+
++ dances.random
 
 #### dances.nativeExtend
  实现对低端浏览器, 对 ECMAscript 5 的补全.

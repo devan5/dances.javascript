@@ -35,4 +35,4 @@
 
     exports["throttle"] = throttle;
 
-})(window.dances);
+})(dances);

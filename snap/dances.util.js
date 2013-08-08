@@ -6,5 +6,6 @@ var
         }
     },
 
-    toString = uc(Object.prototype.toString)
+	toString = uc(Object.prototype.toString),
+	slice = uc(Array.prototype.slice)
 ;

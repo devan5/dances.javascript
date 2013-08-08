@@ -14,7 +14,7 @@
             enableInvoke = true
         ;
 
-        nDelay = "number" === typeof nDelay ? nDelay : 40;
+        nDelay = "number" === typeof nDelay ? nDelay : 25;
 
         return function(){
             clearTimeout(promise);
@@ -35,4 +35,4 @@
 
     exports["debounce"] = debounce;
 
-})(window.dances);
+})(dances);
